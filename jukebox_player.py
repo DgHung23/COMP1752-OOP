@@ -3,12 +3,17 @@ import tkinter as tk
 
 import font_manager as fonts
 from view_tracks import TrackViewer
+from song_repository import SongRepository 
+from track_library import TrackLibrary
 
+
+FILE_PATH = "assets/song.csv"
+repository = SongRepository(FILE_PATH)
+library = TrackLibrary(repository)
 
 def view_tracks_clicked():
     status_lbl.configure(text="View Tracks button was clicked!")
-    TrackViewer(tk.Toplevel(window))
-
+    TrackViewer(tk.Toplevel(window), library)
 
 window = tk.Tk()
 window.geometry("520x150")

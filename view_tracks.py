@@ -2,7 +2,6 @@ import tkinter as tk
 import tkinter.scrolledtext as tkst
 
 
-import track_library as lib
 import font_manager as fonts
 
 
@@ -12,9 +11,11 @@ def set_text(text_area, content):
 
 
 class TrackViewer():
-    def __init__(self, window):
+    def __init__(self, window, library):
         window.geometry("750x350")
         window.title("View Tracks")
+
+        self.library = library
 
         list_tracks_btn = tk.Button(window, text="List All Tracks", command=self.list_tracks_clicked)
         list_tracks_btn.grid(row=0, column=0, padx=10, pady=10)
@@ -31,7 +32,7 @@ class TrackViewer():
         self.list_txt = tkst.ScrolledText(window, width=48, height=12, wrap="none")
         self.list_txt.grid(row=1, column=0, columnspan=3, sticky="W", padx=10, pady=10)
 
-        self.track_txt = tk.Text(window, width=24, height=4, wrap="none")
+        self.track_txt = tk.Text(window, width=24, height=5, wrap="none")
         self.track_txt.grid(row=1, column=3, sticky="NW", padx=10, pady=10)
 
         self.status_lbl = tk.Label(window, text="", font=("Helvetica", 10))
@@ -41,19 +42,20 @@ class TrackViewer():
 
     def view_tracks_clicked(self):
         key = self.input_txt.get()
-        name = lib.get_name(key)
+        name = self.library.get_name(key)
         if name is not None:
-            artist = lib.get_artist(key)
-            rating = lib.get_rating(key)
-            play_count = lib.get_play_count(key)
-            track_details = f"{name}\n{artist}\nrating: {rating}\nplays: {play_count}"
+            artist = self.library.get_artist(key)
+            rating = self.library.get_rating(key)
+            play_count = self.library.get_play_count(key)
+            duration = self.library.get_formatted_duration(key)
+            track_details = f"{name}\n{artist}\nrating: {rating}\nplays: {play_count}\nduration: {duration}"
             set_text(self.track_txt, track_details)
         else:
             set_text(self.track_txt, f"Track {key} not found")
         self.status_lbl.configure(text="View Track button was clicked!")
 
     def list_tracks_clicked(self):
-        track_list = lib.list_all()
+        track_list = self.library.list_all()
         set_text(self.list_txt, track_list)
         self.status_lbl.configure(text="List Tracks button was clicked!")
 

@@ -1,0 +1,6 @@
+id,name,artist,rating,play_count,duration,path
+1,What a Wonderful World,Louis Armstrong,5,0,140,tracks/wonderful_world.mp3
+2,Here Comes the Sun,The Beatles,5,0,185,tracks/here_comes_the_sun.mp3
+3,Count on Me,Bruno Mars,3,0,210,tracks/count_on_me.mp3
+4,Three Little Birds,Bob Marley,1,0,195,tracks/three_little_birds.mp3
+5,You've Got a Friend,James Taylor,3,0,250,tracks/youve_got_a_friend.mp3
