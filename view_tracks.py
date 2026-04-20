@@ -3,6 +3,17 @@ import tkinter.scrolledtext as tkst
 
 
 import font_manager as fonts
+from song_repository import SongRepository
+from track_library import TrackLibrary
+from popup import Popup
+
+
+
+FILE_PATH = "assets/song.csv"
+# load data for standalone run
+def build_library(): 
+    repository = SongRepository(FILE_PATH)
+    return TrackLibrary(repository)
 
 
 def set_text(text_area, content):
@@ -14,7 +25,7 @@ class TrackViewer():
     def __init__(self, window, library):
         window.geometry("750x350")
         window.title("View Tracks")
-
+        print(type(library))
         self.library = library
 
         list_tracks_btn = tk.Button(window, text="List All Tracks", command=self.list_tracks_clicked)
@@ -52,6 +63,7 @@ class TrackViewer():
             set_text(self.track_txt, track_details)
         else:
             set_text(self.track_txt, f"Track {key} not found")
+            Popup(window, 0, f"Track {key} not found.")
         self.status_lbl.configure(text="View Track button was clicked!")
 
     def list_tracks_clicked(self):
@@ -62,5 +74,6 @@ class TrackViewer():
 if __name__ == "__main__":  # only runs when this file is run as a standalone
     window = tk.Tk()        # create a TK object
     fonts.configure()       # configure the fonts
-    TrackViewer(window)     # open the TrackViewer GUI
+    library = build_library()
+    TrackViewer(window, library)     # open the TrackViewer GUI
     window.mainloop()       # run the window main loop, reacting to button presses, etc

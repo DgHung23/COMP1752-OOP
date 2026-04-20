@@ -10,7 +10,6 @@ class Popup:
         self.window = tk.Toplevel(parent)
         self.window.resizable(False, False)
         self.window.title("Notification")
-
         self._setup_ui()
         self._center_window()
 
@@ -40,34 +39,13 @@ class Popup:
         frame = tk.Frame(self.window, bg=bg_color, padx=20, pady=15)
         frame.grid(row=0, column=0)
 
-        title_label = tk.Label(
-            frame,
-            text=title_text,
-            font=("Arial", 14, "bold"),
-            bg=bg_color,
-            fg="white"
-        )
+        title_label = tk.Label(frame,text=title_text,font=("Arial", 14, "bold"),bg=bg_color,fg="white")
         title_label.grid(row=0, column=0, pady=(0, 8), sticky="w")
 
-        message_label = tk.Label(
-            frame,
-            text=self.message,
-            font=("Arial", 11),
-            bg=bg_color,
-            fg="white",
-            wraplength=300,
-            justify="center"
-        )
+        message_label = tk.Label(frame,text=self.message,font=("Arial", 11),bg=bg_color,fg="white",wraplength=300,justify="center")
         message_label.grid(row=1, column=0, pady=(0, 40))
 
-        close_button = tk.Button(
-            frame,
-            text="Close",
-            command=self.close_popup,
-            font=("Arial", 10, "bold"),
-            padx=10,
-            pady=3
-        )
+        close_button = tk.Button(frame,text="Close",command=self.close_popup,font=("Arial", 10, "bold"),padx=10,pady=3)
         close_button.grid(row=2, column=0, sticky="e")
 
     def _center_window(self):
