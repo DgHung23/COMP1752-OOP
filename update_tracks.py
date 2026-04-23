@@ -8,6 +8,10 @@ from popup import Popup
 
 
 FILE_PATH = "assets/song.csv"
+# load data for standalone run
+def build_library():
+    repository = SongRepository(FILE_PATH)
+    return TrackLibrary(repository)
 
 
 def set_text(text_area, content):
@@ -40,7 +44,7 @@ class TrackUpdater:
         update_track_btn = tk.Button(window, text="Update Track", command=self.update_track_clicked)
         update_track_btn.grid(row=0, column=5, padx=10, pady=10)
 
-        self.list_txt = tkst.ScrolledText(window, width=48, height=12, wrap="none")
+        self.list_txt = tkst.ScrolledText(window, width=54, height=12, wrap="none")
         self.list_txt.grid(row=1, column=0, columnspan=4, sticky="W", padx=10, pady=10)
 
         self.track_txt = tk.Text(window, width=26, height=6, wrap="none")
@@ -95,10 +99,6 @@ class TrackUpdater:
         track_list = self.library.list_all()
         set_text(self.list_txt, track_list)
 
-
-def build_library():
-    repository = SongRepository(FILE_PATH)
-    return TrackLibrary(repository)
 
 
 if __name__ == "__main__":

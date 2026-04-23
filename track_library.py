@@ -8,10 +8,33 @@ class TrackLibrary:
         self.library = self.repository.load()
 
     def list_all(self):
-        output = ""
-        for key, song in self.library.items():
-            output += f"{key} {song.info()} ({song.formatted_duration()})\n"
-        return output.strip()
+        if not self.library:
+            return ""
+
+        key_width = 1
+        name_width = 15
+        artist_width = 11
+        rating_width = 5
+        duration_width = 5
+
+        lines = []
+        for key, song in self.library.items(): # to stadarlize text to table form
+            key_text = str(key)[:key_width].ljust(key_width)
+            name_text = song.name[:name_width].ljust(name_width)
+            artist_text = song.artist[:artist_width].ljust(artist_width)
+            rating_text = song.stars()[:rating_width].ljust(rating_width)
+            duration_text = song.formatted_duration()[:duration_width].ljust(duration_width)
+
+            line = (
+                f"{key_text}| "
+                f"{name_text} | "
+                f"{artist_text} | "
+                f"{rating_text} | "
+                f"{duration_text}"
+            )
+            lines.append(line)
+
+        return "\n".join(lines)
 
     def get_song(self, key):
         return self.library.get(str(key))
