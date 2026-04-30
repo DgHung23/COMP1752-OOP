@@ -29,40 +29,82 @@ def set_text(text_area, content):
 class TrackViewer():
     def __init__(self, window, library):
         self.window = window
-        window.geometry("750x350")
-        window.title("View Tracks")
         self.library = library
         self.mixer_ready = False
 
-        list_tracks_btn = tk.Button(window, text="List All Tracks", command=self.list_tracks_clicked)
-        list_tracks_btn.grid(row=0, column=0, padx=10, pady=10)
+        self._build_UI()
 
-        enter_lbl = tk.Label(window, text="Enter Track Number")
-        enter_lbl.grid(row=0, column=1, padx=10, pady=10)
 
-        self.input_txt = tk.Entry(window, width=5)
-        self.input_txt.grid(row=0, column=2, padx=10, pady=10)
+    def _build_UI(self):
+        bg_color = "#121212"
+        panel_color = "#1e1e1e"
+        accent_color = "#ff5500"
+        accent_dark = "#d94800"
+        text_color = "#f5f5f5"
+        muted_color = "#b8b8b8"
+        border_color = "#3a3a3a"
+        secondary_button_color = "#2a2a2a"
+        secondary_button_hover = "#3a3a3a"
 
-        check_track_btn = tk.Button(window, text="View Track", command=self.view_tracks_clicked)
-        check_track_btn.grid(row=0, column=3, padx=10, pady=10)
+        self.window.geometry("1280x720")
+        self.window.title("View Tracks")
+        self.window.configure(bg=bg_color)
 
-        self.list_txt = tkst.ScrolledText(window, width=48, height=12, wrap="none", font="TkFixedFont")
-        self.list_txt.grid(row=1, rowspan=2, column=0, columnspan=3, sticky="W", padx=10, pady=10)
+        # for responsive resize
+        for column in range(8):
+            self.window.grid_columnconfigure(column, weight=1, uniform="track_view")
+        self.window.grid_rowconfigure(3, weight=1)
+        self.window.grid_rowconfigure(4, weight=1)
+        self.window.grid_rowconfigure(5, weight=1)
 
-        self.track_txt = tk.Text(window, width=24, height=5, wrap="none", font="TkFixedFont")
-        self.track_txt.grid(row=1, column=3, columnspan=2, sticky="NW", padx=10, pady=10)
+        title_lbl = tk.Label(self.window,text="View Tracks",font="TkHeadingFont",bg=bg_color,fg=accent_color,)
+        title_lbl.grid(row=0, column=0, columnspan=2, sticky="W", padx=(30, 10), pady=(22, 4))
 
-        # controls_frame = tk.Frame(window)
-        # controls_frame.grid(row=2, column=3, sticky="W", padx=10, pady=(0, 10))
+        subtitle_lbl = tk.Label(self.window,text="Browse the library, inspect details, and play a selected track.",font="TkDefaultFont",bg=bg_color,fg=muted_color,)
+        subtitle_lbl.grid(row=0, column=2, columnspan=6, sticky="E", padx=(10, 30), pady=(22, 4))
 
-        play_btn = tk.Button(window, text="Play", width=10, command=self.play_track_clicked)
-        play_btn.grid(row=2, column=3, padx=(0, 10))
+        list_tracks_btn = tk.Button(self.window,text="List All Tracks",command=self.list_tracks_clicked,font="TkDefaultFont",bg=accent_color,fg="white",activebackground=accent_dark,activeforeground="white",relief="flat",bd=0,width=16,)
+        list_tracks_btn.grid(row=1, column=0, padx=(30, 10), pady=16, ipady=8, sticky="EW")
 
-        stop_btn = tk.Button(window, text="Stop", width=10, command=self.stop_track_clicked)
-        stop_btn.grid(row=2, column=4)
+        enter_lbl = tk.Label(self.window,text="Enter Track Number",font="TkDefaultFont",bg=bg_color,fg=text_color,)
+        enter_lbl.grid(row=1, column=1, columnspan=2, padx=10, pady=16, sticky="E")
 
-        self.status_lbl = tk.Label(window, text="", font=("Helvetica", 10))
-        self.status_lbl.grid(row=3, column=0, columnspan=4, sticky="W", padx=10, pady=10)
+        self.input_txt = tk.Entry(self.window,width=8,font="TkDefaultFont",bg=panel_color,fg=text_color,insertbackground=accent_color,relief="flat",highlightbackground=border_color,highlightcolor=accent_color,highlightthickness=2,)
+        self.input_txt.grid(row=1, column=3, padx=10, pady=16, ipady=8, sticky="EW")
+
+        check_track_btn = tk.Button(self.window,text="View Track",command=self.view_tracks_clicked,font="TkDefaultFont",bg=secondary_button_color,fg=text_color,activebackground=secondary_button_hover,activeforeground="white",relief="flat",bd=0,width=14,)
+        check_track_btn.grid(row=1, column=4, padx=10, pady=16, ipady=8, sticky="EW")
+
+        library_lbl = tk.Label(self.window,text="Track Library",font="TkHeadingFont",bg=bg_color,fg=text_color,)
+        library_lbl.grid(row=2, column=0, columnspan=4, sticky="W", padx=(30, 10), pady=(8, 0))
+
+        selected_lbl = tk.Label(self.window,text="Selected Track",font="TkHeadingFont",bg=bg_color,fg=text_color,)
+        selected_lbl.grid(row=2, column=4, columnspan=4, sticky="W", padx=(18, 30), pady=(8, 0))
+
+        self.list_txt = tkst.ScrolledText(self.window,width=72,height=24,wrap="none",font="TkFixedFont",bg=panel_color,fg=text_color,insertbackground=accent_color,relief="flat",highlightbackground=border_color,highlightcolor=accent_color,highlightthickness=2,)
+        self.list_txt.grid(row=3,rowspan=5,column=0,columnspan=4,sticky="NSEW",padx=(30, 15),pady=(10, 20),)
+
+        self.track_txt = tk.Text(self.window,width=42,height=7,wrap="none",font="TkFixedFont",bg=panel_color,fg=text_color,insertbackground=accent_color,relief="flat",highlightbackground=border_color,highlightcolor=accent_color,highlightthickness=2,)
+        self.track_txt.grid(row=3, column=4, columnspan=4, sticky="NSEW", padx=(18, 30), pady=(10, 12))
+
+        self.animation_canvas = tk.Canvas(self.window,width=420,height=165,bg="#181818",highlightbackground=accent_color,highlightcolor=accent_color,highlightthickness=2,bd=0,)
+        self.animation_canvas.grid(row=4, column=4, columnspan=4, sticky="NSEW", padx=(18, 30), pady=(0, 12))
+
+        play_btn = tk.Button(self.window,text="Play",width=12,command=self.play_track_clicked,font="TkDefaultFont",bg=accent_color,fg="white",activebackground=accent_dark,activeforeground="white",relief="flat",bd=0,)
+        play_btn.grid(row=5, column=4, columnspan=2, padx=(18, 8), pady=(0, 10), ipady=10, sticky="EW")
+
+        stop_btn = tk.Button(self.window,text="Stop",width=12,command=self.stop_track_clicked,font="TkDefaultFont",bg=secondary_button_color,fg=text_color,activebackground=secondary_button_hover,activeforeground="white",relief="flat",bd=0,)
+        stop_btn.grid(row=5, column=6, columnspan=2, padx=(8, 30), pady=(0, 10), ipady=10, sticky="EW")
+
+        volume_lbl = tk.Label(self.window,text="Volume",font="TkDefaultFont",bg=bg_color,fg=text_color,)
+        volume_lbl.grid(row=6, column=4, padx=(18, 8), pady=(4, 0), sticky="E")
+
+        self.volume_value = tk.IntVar(value=70)
+        self.volume_scale = tk.Scale(self.window,from_=0,to=100,orient="horizontal",variable=self.volume_value,command=self.volume_changed,font="TkDefaultFont",bg=bg_color,fg=text_color,activebackground=accent_color,troughcolor="#333333",highlightthickness=0,bd=0,length=360,showvalue=True,)
+        self.volume_scale.grid(row=6, column=5, columnspan=3, padx=(0, 30), pady=(4, 0), sticky="EW")
+
+        self.status_lbl = tk.Label(self.window,text="",font="TkDefaultFont",bg=bg_color,fg=muted_color,)
+        self.status_lbl.grid(row=8, column=0, columnspan=8, sticky="W", padx=30, pady=(0, 18))
 
         self.list_tracks_clicked()
 
@@ -123,6 +165,7 @@ class TrackViewer():
                 self.mixer_ready = True
 
             pygame.mixer.music.load(track_path)
+            pygame.mixer.music.set_volume(self.volume_scale.get() / 100)
             pygame.mixer.music.play()
         except pygame.error as error:
             Popup(self.window, 0, f"Unable to play track {key}: {error}")
@@ -141,6 +184,17 @@ class TrackViewer():
         pygame.mixer.music.stop()
         self.status_lbl.configure(text="Playback stopped.")
         Popup(self.window, 1, "Playback stopped.")
+
+    def volume_changed(self, value):
+        volume = float(value) / 100
+        if pygame is not None and self.mixer_ready:
+            try:
+                pygame.mixer.music.set_volume(volume)
+            except pygame.error:
+                return
+
+        if hasattr(self, "status_lbl"):
+            self.status_lbl.configure(text=f"Volume set to {int(float(value))}%.")
 
 if __name__ == "__main__":  # only runs when this file is run as a standalone
     window = tk.Tk()        # create a TK object

@@ -8,9 +8,7 @@ class Popup:
         self.message = message
 
         self.window = tk.Toplevel(parent)
-        self.window.resizable(False, False)
-        self.window.title("Notification")
-        self._setup_ui()
+        self._build_UI()
         self._center_window()
 
         # popup place on top of parent window
@@ -26,7 +24,11 @@ class Popup:
         self.window.attributes("-topmost", True)
         self.window.after(100, lambda: self.window.attributes("-topmost", False))
 
-    def _setup_ui(self):
+    def _build_UI(self):
+        self.window.geometry("300x150")
+        self.window.resizable(False, False)
+        self.window.title("Notification")
+        self.window.grid_columnconfigure(0, weight=1)
         if self.popup_type == 1:
             title_text = "✔ success"
             bg_color = "#4CAF50"
@@ -36,16 +38,16 @@ class Popup:
 
         self.window.configure(bg=bg_color)
 
-        frame = tk.Frame(self.window, bg=bg_color, padx=20, pady=15)
-        frame.grid(row=0, column=0)
 
-        title_label = tk.Label(frame,text=title_text,font=("Arial", 14, "bold"),bg=bg_color,fg="white")
+
+        
+        title_label = tk.Label(self.window,text=title_text,font=("Arial", 16, "bold"),bg=bg_color,fg="white")
         title_label.grid(row=0, column=0, pady=(0, 8), sticky="w")
 
-        message_label = tk.Label(frame,text=self.message,font=("Arial", 11),bg=bg_color,fg="white",wraplength=300,justify="center")
+        message_label = tk.Label(self.window,text=self.message,font=("Arial", 14),bg=bg_color,fg="white",wraplength=300,justify="center")
         message_label.grid(row=1, column=0, pady=(0, 40))
 
-        close_button = tk.Button(frame,text="Close",command=self.close_popup,font=("Arial", 10, "bold"),padx=10,pady=3)
+        close_button = tk.Button(self.window,text="Close",command=self.close_popup,font=("Arial", 10, "bold"),padx=10,pady=3)
         close_button.grid(row=2, column=0, sticky="e")
 
     def _center_window(self):

@@ -8,6 +8,7 @@ class TrackLibrary:
         self.library = self.repository.load()
 
     def list_all(self):
+        self.library = self.repository.load()
         if not self.library:
             return ""
 

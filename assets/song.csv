@@ -1,7 +1,7 @@
 id,name,artist,rating,play_count,duration,path
-1,The Nights,Avicii,4,0,220,assets\songs\Avicii-The_Nights.mp3
-2,Waiting For Love,Avicii,3,0,230,assets\songs\Avicii-Waiting_For_Love.mp3
-3,Its My Life,Bon_Jovi,3,0,224,assets\songs\Bon_Jovi-Its_My_Life.mp3
+1,The Nights,Avicii,5,26,220,assets\songs\Avicii-The_Nights.mp3
+2,Waiting For Love,Avicii,3,7,230,assets\songs\Avicii-Waiting_For_Love.mp3
+3,Its My Life,Bon_Jovi,3,1,224,assets\songs\Bon_Jovi-Its_My_Life.mp3
 4,Mockingbird,Eminem,2,0,253,assets\songs\Eminem-Mockingbird.mp3
 5,7_Years,The_Weeknd,2,0,234,assets\songs\Lukas_Graham-7_Years.mp3
 6,False Alarm,Lukas_Graham,4,0,220,assets\songs\The_Weeknd-False_Alarm.mp3
