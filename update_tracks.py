@@ -30,32 +30,55 @@ class TrackUpdater:
 
 
     def _build_UI(self):
-        list_tracks_btn = tk.Button(self.window, text="List All Tracks", command=self.list_tracks_clicked)
-        list_tracks_btn.grid(row=0, column=0, padx=10, pady=10)
+        self.window.geometry("960x520")
+        self.window.configure(bg="#111111")
 
-        enter_track_lbl = tk.Label(self.window, text="Enter Track Number")
-        enter_track_lbl.grid(row=0, column=1, padx=10, pady=10)
+        self.window.grid_columnconfigure(0, weight=1)
+        self.window.grid_columnconfigure(1, weight=1)
+        self.window.grid_columnconfigure(2, weight=1)
+        self.window.grid_columnconfigure(3, weight=1)
+        self.window.grid_columnconfigure(4, weight=1)
+        self.window.grid_columnconfigure(5, weight=1)
+        self.window.grid_rowconfigure(3, weight=1)
 
-        self.track_input_txt = tk.Entry(self.window, width=5)
-        self.track_input_txt.grid(row=0, column=2, padx=10, pady=10)
+        title_lbl = tk.Label(self.window, text="Update Tracks", font="TkHeadingFont", bg="#111111", fg="#ff5500")
+        title_lbl.grid(row=0, column=0, columnspan=2, sticky="W", padx=24, pady=(22, 8))
 
-        enter_rating_lbl = tk.Label(self.window, text="Enter New Rating")
-        enter_rating_lbl.grid(row=0, column=3, padx=10, pady=10)
+        subtitle_lbl = tk.Label(self.window, text="Change ratings and review updated track details.", font="TkDefaultFont", bg="#111111", fg="#b8b8b8")
+        subtitle_lbl.grid(row=0, column=2, columnspan=4, sticky="E", padx=24, pady=(22, 8))
 
-        self.rating_input_txt = tk.Entry(self.window, width=5)
-        self.rating_input_txt.grid(row=0, column=4, padx=10, pady=10)
+        list_tracks_btn = tk.Button(self.window, text="List All Tracks", command=self.list_tracks_clicked, font="TkDefaultFont", bg="#222222", fg="#f5f5f5", activebackground="#303030", activeforeground="white", relief="flat", bd=0)
+        list_tracks_btn.grid(row=1, column=0, padx=(24, 8), pady=12, ipady=8, sticky="EW")
 
-        update_track_btn = tk.Button(self.window, text="Update Track", command=self.update_track_clicked)
-        update_track_btn.grid(row=0, column=5, padx=10, pady=10)
+        enter_track_lbl = tk.Label(self.window, text="Track Number", font="TkDefaultFont", bg="#111111", fg="#f5f5f5")
+        enter_track_lbl.grid(row=1, column=1, padx=8, pady=12, sticky="E")
 
-        self.list_txt = tkst.ScrolledText(self.window, width=54, height=12, wrap="none")
-        self.list_txt.grid(row=1, column=0, columnspan=4, sticky="W", padx=10, pady=10)
+        self.track_input_txt = tk.Entry(self.window, width=8, font="TkDefaultFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.track_input_txt.grid(row=1, column=2, padx=8, pady=12, ipady=8, sticky="EW")
 
-        self.track_txt = tk.Text(self.window, width=26, height=6, wrap="none")
-        self.track_txt.grid(row=1, column=4, columnspan=2, sticky="NW", padx=10, pady=10)
+        enter_rating_lbl = tk.Label(self.window, text="New Rating", font="TkDefaultFont", bg="#111111", fg="#f5f5f5")
+        enter_rating_lbl.grid(row=1, column=3, padx=8, pady=12, sticky="E")
 
-        self.status_lbl = tk.Label(self.window, text="", font=("Helvetica", 10))
-        self.status_lbl.grid(row=2, column=0, columnspan=6, sticky="W", padx=10, pady=10)
+        self.rating_input_txt = tk.Entry(self.window, width=8, font="TkDefaultFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.rating_input_txt.grid(row=1, column=4, padx=8, pady=12, ipady=8, sticky="EW")
+
+        update_track_btn = tk.Button(self.window, text="Update Track", command=self.update_track_clicked, font="TkDefaultFont", bg="#ff5500", fg="white", activebackground="#d94800", activeforeground="white", relief="flat", bd=0)
+        update_track_btn.grid(row=1, column=5, padx=(8, 24), pady=12, ipady=8, sticky="EW")
+
+        library_lbl = tk.Label(self.window, text="Track Library", font="TkHeadingFont", bg="#111111", fg="#f5f5f5")
+        library_lbl.grid(row=2, column=0, columnspan=4, sticky="NW", padx=(24, 8), pady=(12, 0))
+
+        details_lbl = tk.Label(self.window, text="Updated Track", font="TkHeadingFont", bg="#111111", fg="#f5f5f5")
+        details_lbl.grid(row=2, column=4, columnspan=2, sticky="NW", padx=(8, 24), pady=(12, 0))
+
+        self.list_txt = tkst.ScrolledText(self.window, width=54, height=16, wrap="none", font="TkFixedFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.list_txt.grid(row=3, column=0, columnspan=4, sticky="NSEW", padx=(24, 8), pady=(8, 14))
+
+        self.track_txt = tk.Text(self.window, width=30, height=16, wrap="none", font="TkFixedFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.track_txt.grid(row=3, column=4, columnspan=2, sticky="NSEW", padx=(8, 24), pady=(8, 14))
+
+        self.status_lbl = tk.Label(self.window, text="", font="TkDefaultFont", bg="#111111", fg="#b8b8b8")
+        self.status_lbl.grid(row=4, column=0, columnspan=6, sticky="W", padx=24, pady=(0, 18))
 
         self.list_tracks_clicked()
 
@@ -73,7 +96,7 @@ class TrackUpdater:
         if name is None:
             set_text(self.track_txt, f"Track {key} not found.")
             self.status_lbl.configure(text="The track number is invalid.")
-            Popup(window, 0, f"Track {key} not found.")
+            Popup(self.window, 0, f"Track {key} not found.")
             return
 
         try:
@@ -81,7 +104,7 @@ class TrackUpdater:
         except ValueError:
             set_text(self.track_txt, "Please enter a integer rating between 0 and 5.")
             self.status_lbl.configure(text="The rating is invalid.")
-            Popup(window, 0, "the rating must be integer")
+            Popup(self.window, 0, "the rating must be integer")
             return
 
         try:
@@ -89,7 +112,7 @@ class TrackUpdater:
         except ValueError as error:
             set_text(self.track_txt, str(error))
             self.status_lbl.configure(text="The rating is invalid.")
-            Popup(window, 0, "the rating number must be between 0 and 5")
+            Popup(self.window, 0, "the rating number must be between 0 and 5")
             return
 
         play_count = self.library.get_play_count(key)
@@ -97,7 +120,7 @@ class TrackUpdater:
         set_text(self.track_txt, track_details)
         self.list_tracks_clicked()
         self.status_lbl.configure(text=f'Track {key} was updated.')
-        Popup(window, 1, f'Track {key} was updated with a rating of {rating}.')
+        Popup(self.window, 1, f'Track {key} was updated with a rating of {rating}.')
 
     def list_tracks_clicked(self):
         track_list = self.library.list_all()

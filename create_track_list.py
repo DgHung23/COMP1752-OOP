@@ -19,39 +19,56 @@ class TrackListCreator:
     def __init__(self, window, library):
         self.library = library
         self.playlist = []
+        self.window = window
+        self._build_UI()
 
-        window.geometry("860x360")
-        window.title("Create Track List")
+    def _build_UI(self):
+        self.window.geometry("960x520")
+        self.window.title("Create Track List")
+        self.window.configure(bg="#111111")
 
-        list_tracks_btn = tk.Button(window, text="List All Tracks", command=self.list_tracks_clicked)
-        list_tracks_btn.grid(row=0, column=0, padx=10, pady=10)
+        for i in range(6):
+            self.window.grid_columnconfigure(i, weight=1)
+        self.window.grid_rowconfigure(3, weight=1)
 
-        enter_lbl = tk.Label(window, text="Enter Track Number")
-        enter_lbl.grid(row=0, column=1, padx=10, pady=10)
+        title_lbl = tk.Label(self.window, text="Create Track List", font="TkHeadingFont", bg="#111111", fg="#ff5500")
+        title_lbl.grid(row=0, column=0, columnspan=2, sticky="W", padx=24, pady=(22, 8))
 
-        self.input_txt = tk.Entry(window, width=5)
-        self.input_txt.grid(row=0, column=2, padx=10, pady=10)
+        subtitle_lbl = tk.Label(self.window, text="Build your playlist from the track library.", font="TkDefaultFont", bg="#111111", fg="#b8b8b8")
+        subtitle_lbl.grid(row=0, column=2, columnspan=4, sticky="E", padx=24, pady=(22, 8))
 
-        add_track_btn = tk.Button(window, text="Add Track", command=self.add_track_clicked)
-        add_track_btn.grid(row=0, column=3, padx=10, pady=10)
+        list_tracks_btn = tk.Button(self.window, text="List All Tracks", command=self.list_tracks_clicked, font="TkDefaultFont", bg="#222222", fg="#f5f5f5", activebackground="#303030", activeforeground="white", relief="flat", bd=0)
+        list_tracks_btn.grid(row=1, column=0, padx=(24, 8), pady=12, ipady=8, sticky="EW")
 
-        play_list_btn = tk.Button(window, text="Play Playlist", command=self.play_playlist_clicked)
-        play_list_btn.grid(row=0, column=4, padx=10, pady=10)
+        enter_lbl = tk.Label(self.window, text="Track Number", font="TkDefaultFont", bg="#111111", fg="#f5f5f5")
+        enter_lbl.grid(row=1, column=1, padx=8, pady=12, sticky="E")
 
-        reset_playlist_btn = tk.Button(window, text="Reset Playlist", command=self.reset_playlist_clicked)
-        reset_playlist_btn.grid(row=0, column=5, padx=10, pady=10)
+        self.input_txt = tk.Entry(self.window, width=8, font="TkDefaultFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.input_txt.grid(row=1, column=2, padx=8, pady=12, ipady=8, sticky="EW")
 
-        self.list_txt = tkst.ScrolledText(window, width=48, height=12, wrap="none")
-        self.list_txt.grid(row=1, column=0, columnspan=4, sticky="W", padx=10, pady=10)
+        add_track_btn = tk.Button(self.window, text="Add Track", command=self.add_track_clicked, font="TkDefaultFont", bg="#ff5500", fg="white", activebackground="#d94800", activeforeground="white", relief="flat", bd=0)
+        add_track_btn.grid(row=1, column=3, padx=8, pady=12, ipady=8, sticky="EW")
 
-        playlist_lbl = tk.Label(window, text="Playlist")
-        playlist_lbl.grid(row=1, column=4, columnspan=2, sticky="W", padx=10, pady=(10, 0))
+        play_list_btn = tk.Button(self.window, text="Play Playlist", command=self.play_playlist_clicked, font="TkDefaultFont", bg="#222222", fg="#f5f5f5", activebackground="#303030", activeforeground="white", relief="flat", bd=0)
+        play_list_btn.grid(row=1, column=4, padx=8, pady=12, ipady=8, sticky="EW")
 
-        self.playlist_txt = tk.Text(window, width=28, height=12, wrap="none")
-        self.playlist_txt.grid(row=1, column=4, columnspan=2, sticky="NW", padx=10, pady=(35, 10))
+        reset_playlist_btn = tk.Button(self.window, text="Reset Playlist", command=self.reset_playlist_clicked, font="TkDefaultFont", bg="#222222", fg="#f5f5f5", activebackground="#303030", activeforeground="white", relief="flat", bd=0)
+        reset_playlist_btn.grid(row=1, column=5, padx=(8, 24), pady=12, ipady=8, sticky="EW")
 
-        self.status_lbl = tk.Label(window, text="", font=("Helvetica", 10))
-        self.status_lbl.grid(row=2, column=0, columnspan=6, sticky="W", padx=10, pady=10)
+        library_lbl = tk.Label(self.window, text="Track Library", font="TkHeadingFont", bg="#111111", fg="#f5f5f5")
+        library_lbl.grid(row=2, column=0, columnspan=4, sticky="NW", padx=(24, 8), pady=(12, 0))
+
+        playlist_lbl = tk.Label(self.window, text="Playlist", font="TkHeadingFont", bg="#111111", fg="#f5f5f5")
+        playlist_lbl.grid(row=2, column=4, columnspan=2, sticky="NW", padx=(8, 24), pady=(12, 0))
+
+        self.list_txt = tkst.ScrolledText(self.window, width=54, height=16, wrap="none", font="TkFixedFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.list_txt.grid(row=3, column=0, columnspan=4, sticky="NSEW", padx=(24, 8), pady=(8, 14))
+
+        self.playlist_txt = tk.Text(self.window, width=30, height=16, wrap="none", font="TkFixedFont", bg="#181818", fg="#f5f5f5", insertbackground="#ff5500", relief="flat", highlightbackground="#343434", highlightcolor="#ff5500", highlightthickness=2)
+        self.playlist_txt.grid(row=3, column=4, columnspan=2, sticky="NSEW", padx=(8, 24), pady=(8, 14))
+
+        self.status_lbl = tk.Label(self.window, text="", font="TkDefaultFont", bg="#111111", fg="#b8b8b8")
+        self.status_lbl.grid(row=4, column=0, columnspan=6, sticky="W", padx=24, pady=(0, 18))
 
         self.list_tracks_clicked()
 
@@ -59,25 +76,25 @@ class TrackListCreator:
         key = self.input_txt.get().strip()
         if not key:
             self.status_lbl.configure(text="Please enter a track number.")
-            Popup(window, 0, "Please enter a track number.")
+            Popup(self.window, 0, "Please enter a track number.")
             return
 
         name = self.library.get_name(key)
         if name is None:
             self.status_lbl.configure(text=f"Track {key} not found.")
-            Popup(window, 0, f"Track {key} not found.")
+            Popup(self.window, 0, f"Track {key} not found.")
             return
 
         self.playlist.append(key)
         self.refresh_playlist()
         self.status_lbl.configure(text=f'"{name}" was added to the playlist.')
-        Popup(window, 1, f'"{name}" was added to the playlist.')
+        Popup(self.window, 1, f'"{name}" was added to the playlist.')
         self.input_txt.delete(0, tk.END)
 
     def play_playlist_clicked(self):
         if not self.playlist:
             self.status_lbl.configure(text="Add at least one track before playing the playlist.")
-            Popup(window, 0, "Add at least one track before playing the playlist.")
+            Popup(self.window, 0, "Add at least one track before playing the playlist.")
             return
 
         for key in self.playlist:
@@ -90,12 +107,12 @@ class TrackListCreator:
     def reset_playlist_clicked(self):
         if len(self.playlist) == 0:
             self.status_lbl.configure(text="The playlist is already empty.")
-            Popup(window, 0, "The playlist is already empty.")
+            Popup(self.window, 0, "The playlist is already empty.")
             return
         self.playlist = []
         set_text(self.playlist_txt, "")
         self.status_lbl.configure(text="The playlist was reset.")
-        Popup(window, 1, "The playlist was reset.")
+        Popup(self.window, 1, "The playlist was reset.")
 
     def list_tracks_clicked(self):
         track_list = self.library.list_all()
@@ -112,9 +129,9 @@ def build_library():
     return TrackLibrary(repository)
 
 
-if __name__ == "__main__":
-    window = tk.Tk()
-    fonts.configure()
-    library = build_library()
-    TrackListCreator(window, library)
-    window.mainloop()
+if __name__ == "__main__": # block to run in standalone version
+    window = tk.Tk() # create a Tkinter window
+    fonts.configure() # configure fonts using the font_manager module
+    library = build_library() # load the data from the song repository
+    TrackListCreator(window, library) # create a view_track UI window with attached data library
+    window.mainloop() # start Tkinter loop to keep the window open

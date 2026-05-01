@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.scrolledtext as tkst
 import os
+import random
 
 try:
     import pygame
@@ -36,74 +37,65 @@ class TrackViewer():
 
 
     def _build_UI(self):
-        bg_color = "#121212"
-        panel_color = "#1e1e1e"
-        accent_color = "#ff5500"
-        accent_dark = "#d94800"
-        text_color = "#f5f5f5"
-        muted_color = "#b8b8b8"
-        border_color = "#3a3a3a"
-        secondary_button_color = "#2a2a2a"
-        secondary_button_hover = "#3a3a3a"
 
         self.window.geometry("1280x720")
         self.window.title("View Tracks")
-        self.window.configure(bg=bg_color)
+        self.window.configure(bg="#121212")
 
         # for responsive resize
-        for column in range(8):
-            self.window.grid_columnconfigure(column, weight=1, uniform="track_view")
+        for i in range(8):
+            self.window.grid_columnconfigure(i, weight=1, uniform="track_view")
         self.window.grid_rowconfigure(3, weight=1)
         self.window.grid_rowconfigure(4, weight=1)
         self.window.grid_rowconfigure(5, weight=1)
 
-        title_lbl = tk.Label(self.window,text="View Tracks",font="TkHeadingFont",bg=bg_color,fg=accent_color,)
+        title_lbl = tk.Label(self.window,text="View Tracks",font="TkHeadingFont",bg="#121212",fg="#ff5500",)
         title_lbl.grid(row=0, column=0, columnspan=2, sticky="W", padx=(30, 10), pady=(22, 4))
 
-        subtitle_lbl = tk.Label(self.window,text="Browse the library, inspect details, and play a selected track.",font="TkDefaultFont",bg=bg_color,fg=muted_color,)
+        subtitle_lbl = tk.Label(self.window,text="Browse the library, inspect details, and play a selected track.",font="TkDefaultFont",bg="#121212",fg="#b8b8b8",)
         subtitle_lbl.grid(row=0, column=2, columnspan=6, sticky="E", padx=(10, 30), pady=(22, 4))
 
-        list_tracks_btn = tk.Button(self.window,text="List All Tracks",command=self.list_tracks_clicked,font="TkDefaultFont",bg=accent_color,fg="white",activebackground=accent_dark,activeforeground="white",relief="flat",bd=0,width=16,)
+        list_tracks_btn = tk.Button(self.window,text="List All Tracks",command=self.list_tracks_clicked,font="TkDefaultFont",bg="#ff5500",fg="white",activebackground="#d94800",activeforeground="white",relief="flat",bd=0,width=16,)
         list_tracks_btn.grid(row=1, column=0, padx=(30, 10), pady=16, ipady=8, sticky="EW")
 
-        enter_lbl = tk.Label(self.window,text="Enter Track Number",font="TkDefaultFont",bg=bg_color,fg=text_color,)
+        enter_lbl = tk.Label(self.window,text="Enter Track Number",font="TkDefaultFont",bg="#121212",fg="#f5f5f5",)
         enter_lbl.grid(row=1, column=1, columnspan=2, padx=10, pady=16, sticky="E")
 
-        self.input_txt = tk.Entry(self.window,width=8,font="TkDefaultFont",bg=panel_color,fg=text_color,insertbackground=accent_color,relief="flat",highlightbackground=border_color,highlightcolor=accent_color,highlightthickness=2,)
+        self.input_txt = tk.Entry(self.window,width=8,font="TkDefaultFont",bg="#1e1e1e",fg="#f5f5f5",insertbackground="#ff5500",relief="flat",highlightbackground="#3a3a3a",highlightcolor="#ff5500",highlightthickness=2,)
         self.input_txt.grid(row=1, column=3, padx=10, pady=16, ipady=8, sticky="EW")
 
-        check_track_btn = tk.Button(self.window,text="View Track",command=self.view_tracks_clicked,font="TkDefaultFont",bg=secondary_button_color,fg=text_color,activebackground=secondary_button_hover,activeforeground="white",relief="flat",bd=0,width=14,)
+        check_track_btn = tk.Button(self.window,text="View Track",command=self.view_tracks_clicked,font="TkDefaultFont",bg="#2a2a2a",fg="#f5f5f5",activebackground="#3a3a3a",activeforeground="white",relief="flat",bd=0,width=14,)
         check_track_btn.grid(row=1, column=4, padx=10, pady=16, ipady=8, sticky="EW")
 
-        library_lbl = tk.Label(self.window,text="Track Library",font="TkHeadingFont",bg=bg_color,fg=text_color,)
+        library_lbl = tk.Label(self.window,text="Track Library",font="TkHeadingFont",bg="#121212",fg="#f5f5f5",)
         library_lbl.grid(row=2, column=0, columnspan=4, sticky="W", padx=(30, 10), pady=(8, 0))
 
-        selected_lbl = tk.Label(self.window,text="Selected Track",font="TkHeadingFont",bg=bg_color,fg=text_color,)
+        selected_lbl = tk.Label(self.window,text="Selected Track",font="TkHeadingFont",bg="#121212",fg="#f5f5f5",)
         selected_lbl.grid(row=2, column=4, columnspan=4, sticky="W", padx=(18, 30), pady=(8, 0))
 
-        self.list_txt = tkst.ScrolledText(self.window,width=72,height=24,wrap="none",font="TkFixedFont",bg=panel_color,fg=text_color,insertbackground=accent_color,relief="flat",highlightbackground=border_color,highlightcolor=accent_color,highlightthickness=2,)
+        self.list_txt = tkst.ScrolledText(self.window,width=72,height=24,wrap="none",font="TkFixedFont",bg="#1e1e1e",fg="#f5f5f5",insertbackground="#ff5500",relief="flat",highlightbackground="#3a3a3a",highlightcolor="#ff5500",highlightthickness=2,)
         self.list_txt.grid(row=3,rowspan=5,column=0,columnspan=4,sticky="NSEW",padx=(30, 15),pady=(10, 20),)
 
-        self.track_txt = tk.Text(self.window,width=42,height=7,wrap="none",font="TkFixedFont",bg=panel_color,fg=text_color,insertbackground=accent_color,relief="flat",highlightbackground=border_color,highlightcolor=accent_color,highlightthickness=2,)
+        self.track_txt = tk.Text(self.window,width=42,height=7,wrap="none",font="TkFixedFont",bg="#1e1e1e",fg="#f5f5f5",insertbackground="#ff5500",relief="flat",highlightbackground="#3a3a3a",highlightcolor="#ff5500",highlightthickness=2,)
         self.track_txt.grid(row=3, column=4, columnspan=4, sticky="NSEW", padx=(18, 30), pady=(10, 12))
 
-        self.animation_canvas = tk.Canvas(self.window,width=420,height=165,bg="#181818",highlightbackground=accent_color,highlightcolor=accent_color,highlightthickness=2,bd=0,)
+        self.animation_canvas = tk.Canvas(self.window,width=420,height=165,bg="#181818",highlightbackground="#ff5500",highlightcolor="#ff5500",highlightthickness=2,bd=0,)
         self.animation_canvas.grid(row=4, column=4, columnspan=4, sticky="NSEW", padx=(18, 30), pady=(0, 12))
 
-        play_btn = tk.Button(self.window,text="Play",width=12,command=self.play_track_clicked,font="TkDefaultFont",bg=accent_color,fg="white",activebackground=accent_dark,activeforeground="white",relief="flat",bd=0,)
+        play_btn = tk.Button(self.window,text="Play",width=12,command=self.play_track_clicked,font="TkDefaultFont",bg="#ff5500",fg="white",activebackground="#d94800",activeforeground="white",relief="flat",bd=0,)
         play_btn.grid(row=5, column=4, columnspan=2, padx=(18, 8), pady=(0, 10), ipady=10, sticky="EW")
 
-        stop_btn = tk.Button(self.window,text="Stop",width=12,command=self.stop_track_clicked,font="TkDefaultFont",bg=secondary_button_color,fg=text_color,activebackground=secondary_button_hover,activeforeground="white",relief="flat",bd=0,)
+        stop_btn = tk.Button(self.window,text="Stop",width=12,command=self.stop_track_clicked,font="TkDefaultFont",bg="#2a2a2a",fg="#f5f5f5",activebackground="#3a3a3a",activeforeground="white",relief="flat",bd=0,)
         stop_btn.grid(row=5, column=6, columnspan=2, padx=(8, 30), pady=(0, 10), ipady=10, sticky="EW")
 
-        volume_lbl = tk.Label(self.window,text="Volume",font="TkDefaultFont",bg=bg_color,fg=text_color,)
+        volume_lbl = tk.Label(self.window,text="Volume",font="TkDefaultFont",bg="#121212",fg="#f5f5f5",)
         volume_lbl.grid(row=6, column=4, padx=(18, 8), pady=(4, 0), sticky="E")
 
         self.volume_value = tk.IntVar(value=70)
-        self.volume_scale = tk.Scale(self.window,from_=0,to=100,orient="horizontal",variable=self.volume_value,command=self.volume_changed,font="TkDefaultFont",bg=bg_color,fg=text_color,activebackground=accent_color,troughcolor="#333333",highlightthickness=0,bd=0,length=360,showvalue=True,)
+        self.volume_scale = tk.Scale(self.window,from_=0,to=100,orient="horizontal",variable=self.volume_value,command=self.volume_changed,font="TkDefaultFont",bg="#121212",fg="#f5f5f5",activebackground="#ff5500",troughcolor="#333333",highlightthickness=0,bd=0,length=360,showvalue=True,)
         self.volume_scale.grid(row=6, column=5, columnspan=3, padx=(0, 30), pady=(4, 0), sticky="EW")
 
-        self.status_lbl = tk.Label(self.window,text="",font="TkDefaultFont",bg=bg_color,fg=muted_color,)
+        self.status_lbl = tk.Label(self.window,text="",font="TkDefaultFont",bg="#121212",fg="#b8b8b8",)
         self.status_lbl.grid(row=8, column=0, columnspan=8, sticky="W", padx=30, pady=(0, 18))
 
         self.list_tracks_clicked()
@@ -131,35 +123,35 @@ class TrackViewer():
     def play_track_clicked(self):
         key = self.input_txt.get().strip()
 
-        if not key:
+        if not key: # number check
             Popup(self.window, 0, "Please enter a track number.")
             self.status_lbl.configure(text="No track number was entered.")
             return
 
         name = self.library.get_name(key)
-        if name is None:
+        if name is None: # exist song check
             Popup(self.window, 0, f"Track {key} not found.")
             self.status_lbl.configure(text=f"Track {key} was not found.")
             return
 
         raw_path = self.library.get_path(key)
-        if not raw_path:
+        if not raw_path: # path check
             Popup(self.window, 0, f'Track {key} does not have an audio file path.')
             self.status_lbl.configure(text=f'Track {key} does not have an audio file path.')
             return
 
         track_path = os.path.normpath(os.path.join(os.path.dirname(__file__), raw_path))
-        if not os.path.exists(track_path):
+        if not os.path.exists(track_path): # file exists check
             Popup(self.window, 0, f'Audio file for track {key} was not found.')
             self.status_lbl.configure(text=f'Audio file for track {key} was not found.')
             return
 
-        if pygame is None:
+        if pygame is None: # pygame import failsafe handle
             Popup(self.window, 0, "pygame is not installed, so audio playback is unavailable.")
             self.status_lbl.configure(text="pygame is not installed.")
             return
 
-        try:
+        try: # pygame mixer engine failsafe handle
             if not self.mixer_ready:
                 pygame.mixer.init()
                 self.mixer_ready = True
@@ -167,12 +159,20 @@ class TrackViewer():
             pygame.mixer.music.load(track_path)
             pygame.mixer.music.set_volume(self.volume_scale.get() / 100)
             pygame.mixer.music.play()
+            self.library.increment_play_count(key)
         except pygame.error as error:
             Popup(self.window, 0, f"Unable to play track {key}: {error}")
             self.status_lbl.configure(text=f"Unable to play track {key}.")
             return
-
+        
         self.view_tracks_clicked()
+        
+        try: # animation failsafe handle
+            self.start_visualizer()
+        except Exception as error:
+            self.status_lbl.configure(text="Audio visualizer failed to start.")
+            return
+
         self.status_lbl.configure(text=f'Now playing "{name}".')
 
     def stop_track_clicked(self):
@@ -182,6 +182,13 @@ class TrackViewer():
             return
 
         pygame.mixer.music.stop()
+
+        try: # animation failsafe handle
+            self.stop_visualizer()
+        except Exception as error:
+            self.status_lbl.configure(text="Audio visualizer failed to stop.")
+            return
+
         self.status_lbl.configure(text="Playback stopped.")
         Popup(self.window, 1, "Playback stopped.")
 
@@ -195,6 +202,52 @@ class TrackViewer():
 
         if hasattr(self, "status_lbl"):
             self.status_lbl.configure(text=f"Volume set to {int(float(value))}%.")
+
+    def start_visualizer(self):
+        self.bars = 60
+        self.canvas_width = 600
+        self.canvas_height = 165
+        self.bar_width = self.canvas_width // self.bars
+        self.visualizer_running = True
+        self.animate_visualizer()
+
+    def animate_visualizer(self):
+        if not self.visualizer_running:
+            return
+    
+        self.animation_canvas.delete("bars")
+    
+        center_y = self.canvas_height // 2
+        print(self.volume_value.get())
+    
+        for i in range(self.bars):
+            height = random.randint(3, self.volume_value.get() + 3)
+    
+            x1 = i * self.bar_width
+            x2 = x1 + self.bar_width - 2
+    
+            y1 = center_y - height
+            y2 = center_y + height
+    
+            color = random.choice([
+                "#ff5500",
+                "#ff7733",
+                "#ffaa66",
+                "#ffd1b3"
+            ])
+    
+            self.animation_canvas.create_rectangle(
+                x1, y1, x2, y2,
+                fill=color,
+                outline="",
+                tags="bars"
+            )
+    
+        self.window.after(70, self.animate_visualizer)
+
+    def stop_visualizer(self):
+        self.visualizer_running = False
+        self.animation_canvas.delete("bars")
 
 if __name__ == "__main__":  # only runs when this file is run as a standalone
     window = tk.Tk()        # create a TK object
