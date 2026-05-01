@@ -12,4 +12,4 @@ def configure():
     text_font.configure(size=12, family=ui_family)
 
     fixed_font = tkfont.nametofont("TkFixedFont")
-    fixed_font.configure(size=12, family=monospace_family)
+    fixed_font.configure(size=18, family=monospace_family)

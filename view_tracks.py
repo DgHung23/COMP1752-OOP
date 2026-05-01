@@ -218,7 +218,6 @@ class TrackViewer():
         self.animation_canvas.delete("bars")
     
         center_y = self.canvas_height // 2
-        print(self.volume_value.get())
     
         for i in range(self.bars):
             height = random.randint(3, self.volume_value.get() + 3)
