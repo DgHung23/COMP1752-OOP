@@ -4,12 +4,12 @@ from song_repository import SongRepository
 
 class TrackLibrary:
     def __init__(self, repository):
-        self.repository = repository
-        self.library = self.repository.load()
+        self._repository = repository
+        self._library = self._repository.load()
 
     def list_all(self):
-        self.library = self.repository.load()
-        if not self.library:
+        self._library = self._repository.load()
+        if not self._library:
             return ""
 
         key_width = 1
@@ -19,10 +19,10 @@ class TrackLibrary:
         duration_width = 5
 
         lines = []
-        for key, song in self.library.items(): # to stadarlize text to table form
+        for key, song in self._library.items(): # to stadarlize text to table form
             key_text = str(key)[:key_width].ljust(key_width)
-            name_text = song.name[:name_width].ljust(name_width)
-            artist_text = song.artist[:artist_width].ljust(artist_width)
+            name_text = song._name[:name_width].ljust(name_width)
+            artist_text = song._artist[:artist_width].ljust(artist_width)
             rating_text = song.stars()[:rating_width].ljust(rating_width)
             duration_text = song.formatted_duration()[:duration_width].ljust(duration_width)
 
@@ -37,72 +37,85 @@ class TrackLibrary:
 
         return "\n".join(lines)
 
-    def get_song(self, key):
-        return self.library.get(str(key))
+    def _normalize_key(self, key):
+        key = str(key).strip()
+        if key in self._library:
+            return key
+        if not key.isdigit():
+            return None
+        return str(int(key))
+
+    def _get_song(self, key):
+        key = self._normalize_key(key)
+        if key is None:
+            return None
+        return self._library.get(key)
 
     def get_name(self, key):
-        song = self.get_song(key)
-        return song.name if song else None
+        song = self._get_song(key)
+        return song._name if song else None
 
     def get_artist(self, key):
-        song = self.get_song(key)
-        return song.artist if song else None
+        song = self._get_song(key)
+        return song._artist if song else None
 
     def get_rating(self, key):
-        song = self.get_song(key)
-        return song.rating if song else -1
+        song = self._get_song(key)
+        return song._rating if song else -1
 
     def get_play_count(self, key):
-        song = self.get_song(key)
-        return song.play_count if song else -1
+        song = self._get_song(key)
+        return song._play_count if song else -1
 
     def get_duration(self, key):
-        song = self.get_song(key)
-        return song.duration if song else -1
+        song = self._get_song(key)
+        return song._duration if song else -1
     
     def get_formatted_duration(self, key):
-        song = self.get_song(key)
+        song = self._get_song(key)
         return song.formatted_duration() if song else None
 
     def get_path(self, key):
-        song = self.get_song(key)
-        return song.path if song else None
+        song = self._get_song(key)
+        return song._path if song else None
 
     def get_image_path(self, key):
-        song = self.get_song(key)
-        return song.image_path if song else None
+        song = self._get_song(key)
+        return song._image_path if song else None
 
     def set_rating(self, key, rating):
-        song = self.get_song(key)
+        song = self._get_song(key)
         if not song:
             return
         song.set_rating(rating)
-        self.repository.save(self.library)
+        self._repository.save(self._library)
 
     def set_image_path(self, key, image_path):
-        song = self.get_song(key)
+        song = self._get_song(key)
         if not song:
             return
-        song.image_path = image_path
-        self.repository.save(self.library)
+        song._image_path = image_path
+        self._repository.save(self._library)
 
     def increment_play_count(self, key):
-        song = self.get_song(key)
+        song = self._get_song(key)
         if not song:
             return
         song.increment_play_count()
-        self.repository.save(self.library)
+        self._repository.save(self._library)
 
     def add_song(self, key, name, artist, rating=0, play_count=0, duration=0, path="", image_path=""):
-        key = str(key)
-        if key in self.library:
+        key = self._normalize_key(key)
+        if key is None:
+            raise ValueError("Track key must contain digits only.")
+        if key in self._library:
             raise ValueError("Key đã tồn tại.")
 
-        self.library[key] = Song(name, artist, rating, play_count, duration, path, image_path)
-        self.repository.save(self.library)
+        self._library[key] = Song(name, artist, rating, play_count, duration, path, image_path)
+        self._repository.save(self._library)
 
     def remove_song(self, key):
-        key = str(key)
-        if key in self.library:
-            del self.library[key]
-            self.repository.save(self.library)
+        key = self._normalize_key(key)
+        if key in self._library:
+            del self._library[key]
+            self._repository.save(self._library)

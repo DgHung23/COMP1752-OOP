@@ -5,15 +5,15 @@ from song import Song
 
 class SongRepository:
     def __init__(self, file_path):
-        self.file_path = file_path
+        self._file_path = file_path
 
     def load(self):
         songs = {}
 
-        if not os.path.exists(self.file_path):
+        if not os.path.exists(self._file_path):
             return songs
 
-        with open(self.file_path, mode="r", newline="", encoding="utf-8") as file:
+        with open(self._file_path, mode="r", newline="", encoding="utf-8") as file:
             reader = csv.DictReader(file)
 
             for row in reader:
@@ -24,7 +24,7 @@ class SongRepository:
         return songs
 
     def save(self, songs):
-        with open(self.file_path, mode="w", newline="", encoding="utf-8") as file:
+        with open(self._file_path, mode="w", newline="", encoding="utf-8") as file:
             fieldnames = ["id","name","artist","rating","play_count","duration","path","image_path"]
 
             writer = csv.DictWriter(file, fieldnames=fieldnames)
