@@ -13,10 +13,6 @@ FILE_PATH = "assets/song.csv"
 repository = SongRepository(FILE_PATH)
 library = TrackLibrary(repository)
 
-
-
-
-
 class JukeBoxApp:
     def __init__(self, window):
         self.window = window

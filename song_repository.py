@@ -25,7 +25,7 @@ class SongRepository:
 
     def save(self, songs):
         with open(self.file_path, mode="w", newline="", encoding="utf-8") as file:
-            fieldnames = ["id","name","artist","rating","play_count","duration","path"]
+            fieldnames = ["id","name","artist","rating","play_count","duration","path","image_path"]
 
             writer = csv.DictWriter(file, fieldnames=fieldnames)
             writer.writeheader()

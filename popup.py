@@ -25,30 +25,29 @@ class Popup:
         self.window.after(100, lambda: self.window.attributes("-topmost", False))
 
     def _build_UI(self):
-        self.window.geometry("300x150")
+        self.window.geometry("360x170")
         self.window.resizable(False, False)
         self.window.title("Notification")
         self.window.grid_columnconfigure(0, weight=1)
         if self.popup_type == 1:
-            title_text = "✔ success"
-            bg_color = "#4CAF50"
+            title_text = "Success"
+            title_color = "#00ff26"
+            btn_color = "#00cc1a"
         else:
-            title_text = "✘ error"
-            bg_color = "#F44336"
+            title_text = "Error"
+            title_color = "#ff3333"
+            btn_color = "#cc0000"
 
-        self.window.configure(bg=bg_color)
+        self.window.configure(bg="#121212")
 
+        title_label = tk.Label(self.window,text=title_text,font=("Arial", 16, "bold"),bg="#121212",fg=title_color)
+        title_label.grid(row=0, column=0, padx=24, pady=(22, 8), sticky="W")
 
+        message_label = tk.Label(self.window,text=self.message,font=("Arial", 12),bg="#121212",fg="#ff8554",wraplength=310,justify="center")
+        message_label.grid(row=1, column=0, padx=24, pady=(0, 18), sticky="NSEW")
 
-        
-        title_label = tk.Label(self.window,text=title_text,font=("Arial", 16, "bold"),bg=bg_color,fg="white")
-        title_label.grid(row=0, column=0, pady=(0, 8), sticky="w")
-
-        message_label = tk.Label(self.window,text=self.message,font=("Arial", 14),bg=bg_color,fg="white",wraplength=300,justify="center")
-        message_label.grid(row=1, column=0, pady=(0, 40))
-
-        close_button = tk.Button(self.window,text="Close",command=self.close_popup,font=("Arial", 10, "bold"),padx=10,pady=3)
-        close_button.grid(row=2, column=0, sticky="e")
+        close_button = tk.Button(self.window,text="Close",command=self.close_popup,font=("Arial", 10, "bold"),bg=btn_color,fg="white",activebackground="#d94800",activeforeground="white",relief="flat",bd=0,width=10)
+        close_button.grid(row=2, column=0, padx=24, pady=(0, 18), ipady=6, sticky="E")
 
     def _center_window(self):
         self.window.update_idletasks()

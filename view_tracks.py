@@ -1,5 +1,6 @@
 import tkinter as tk
 import tkinter.scrolledtext as tkst
+from tkinter import filedialog
 import os
 import random
 
@@ -7,6 +8,12 @@ try:
     import pygame
 except ImportError:
     pygame = None
+
+try:
+    from PIL import Image, ImageTk
+except ImportError:
+    Image = None
+    ImageTk = None
 
 import font_manager as fonts
 from song_repository import SongRepository
@@ -32,6 +39,7 @@ class TrackViewer():
         self.window = window
         self.library = library
         self.mixer_ready = False
+        self.track_image = None
 
         self._build_UI()
 
@@ -70,14 +78,20 @@ class TrackViewer():
         library_lbl = tk.Label(self.window,text="Track Library",font="TkHeadingFont",bg="#121212",fg="#f5f5f5",)
         library_lbl.grid(row=2, column=0, columnspan=4, sticky="W", padx=(30, 10), pady=(8, 0))
 
+        choose_image_btn = tk.Button(self.window,text="Choose Image",command=self.choose_image_clicked,font="TkDefaultFont",bg="#2a2a2a",fg="#f5f5f5",activebackground="#3a3a3a",activeforeground="white",relief="flat",bd=0,width=14,)
+        choose_image_btn.grid(row=2, column=4, columnspan=2, sticky="EW", padx=(18, 8), pady=(8, 0))
+
         selected_lbl = tk.Label(self.window,text="Selected Track",font="TkHeadingFont",bg="#121212",fg="#f5f5f5",)
-        selected_lbl.grid(row=2, column=4, columnspan=4, sticky="W", padx=(18, 30), pady=(8, 0))
+        selected_lbl.grid(row=2, column=6, columnspan=2, sticky="W", padx=(8, 30), pady=(8, 0))
+
+        self.image_lbl = tk.Label(self.window,text="",bg="#1e1e1e",relief="flat",highlightbackground="#3a3a3a",highlightcolor="#ff5500",highlightthickness=2,)
+        self.image_lbl.grid(row=3, column=4, columnspan=2, sticky="NSEW", padx=(18, 8), pady=(10, 12))
 
         self.list_txt = tkst.ScrolledText(self.window,width=72,height=24,wrap="none",font="TkFixedFont",bg="#1e1e1e",fg="#f5f5f5",insertbackground="#ff5500",relief="flat",highlightbackground="#3a3a3a",highlightcolor="#ff5500",highlightthickness=2,)
         self.list_txt.grid(row=3,rowspan=5,column=0,columnspan=4,sticky="NSEW",padx=(30, 15),pady=(10, 20),)
 
         self.track_txt = tk.Text(self.window,width=42,height=7,wrap="none",font="TkFixedFont",bg="#1e1e1e",fg="#f5f5f5",insertbackground="#ff5500",relief="flat",highlightbackground="#3a3a3a",highlightcolor="#ff5500",highlightthickness=2,)
-        self.track_txt.grid(row=3, column=4, columnspan=4, sticky="NSEW", padx=(18, 30), pady=(10, 12))
+        self.track_txt.grid(row=3, column=6, columnspan=2, sticky="NSEW", padx=(8, 30), pady=(10, 12))
 
         self.animation_canvas = tk.Canvas(self.window,width=420,height=165,bg="#181818",highlightbackground="#ff5500",highlightcolor="#ff5500",highlightthickness=2,bd=0,)
         self.animation_canvas.grid(row=4, column=4, columnspan=4, sticky="NSEW", padx=(18, 30), pady=(0, 12))
@@ -110,10 +124,75 @@ class TrackViewer():
             duration = self.library.get_formatted_duration(key)
             track_details = f"{name}\n{artist}\nrating: {rating}\nplays: {play_count}\nduration: {duration}"
             set_text(self.track_txt, track_details)
+            self.show_track_image(key)
         else:
             set_text(self.track_txt, f"Track {key} not found")
+            self.clear_track_image()
             Popup(self.window, 0, f"Track {key} not found.")
         self.status_lbl.configure(text="View Track button was clicked!")
+
+    def choose_image_clicked(self):
+        key = self.input_txt.get().strip()
+        if not key:
+            Popup(self.window, 0, "Please enter a track number.")
+            self.status_lbl.configure(text="No track number was entered.")
+            return
+
+        name = self.library.get_name(key)
+        if name is None:
+            Popup(self.window, 0, f"Track {key} not found.")
+            self.status_lbl.configure(text=f"Track {key} was not found.")
+            return
+
+        image_path = filedialog.askopenfilename(parent=self.window,title="Choose track image",initialdir="./assets/imgs",filetypes=[("Image files", "*.png *.gif *.jpg *.jpeg *.bmp"), ("All files", "*.*")])
+        if not image_path:
+            Popup(self.window, 0, "Image selection was cancelled.")
+            self.status_lbl.configure(text="Image selection was cancelled.")
+            return
+
+        self.library.set_image_path(key, image_path)
+        self.view_tracks_clicked()
+        self.status_lbl.configure(text=f'Image path for "{name}" was updated.')
+
+    def clear_track_image(self):
+        self.track_image = None
+        self.image_lbl.configure(image="", text="")
+
+    def resolve_image_path(self, raw_path):
+        if os.path.isabs(raw_path):
+            return os.path.normpath(raw_path)
+        return os.path.normpath(os.path.join(os.path.dirname(__file__), raw_path))
+
+    def show_track_image(self, key):
+        raw_path = self.library.get_image_path(key)
+        if not raw_path:
+            self.clear_track_image()
+            return
+
+        image_path = self.resolve_image_path(raw_path)
+        if not os.path.exists(image_path):
+            self.clear_track_image()
+            return
+
+        try:
+            self.window.update_idletasks()
+            max_width = self.image_lbl.winfo_width() - 8
+            max_height = self.image_lbl.winfo_height() - 8
+            if max_width < 20:
+                max_width = 240
+            if max_height < 20:
+                max_height = 130
+            if Image is not None and ImageTk is not None:
+                with Image.open(image_path) as image:
+                    image.thumbnail((max_width, max_height))
+                    self.track_image = ImageTk.PhotoImage(image.copy())
+            else:
+                image = tk.PhotoImage(file=image_path)
+                scale = max((image.width() + max_width - 1) // max_width, (image.height() + max_height - 1) // max_height, 1)
+                self.track_image = image.subsample(scale, scale)
+            self.image_lbl.configure(image=self.track_image, text="")
+        except (OSError, tk.TclError):
+            self.clear_track_image()
 
     def list_tracks_clicked(self):
         track_list = self.library.list_all()
@@ -204,8 +283,8 @@ class TrackViewer():
             self.status_lbl.configure(text=f"Volume set to {int(float(value))}%.")
 
     def start_visualizer(self):
-        self.bars = 60
-        self.canvas_width = 600
+        self.bars = 40
+        self.canvas_width = 660
         self.canvas_height = 165
         self.bar_width = self.canvas_width // self.bars
         self.visualizer_running = True

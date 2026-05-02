@@ -68,11 +68,22 @@ class TrackLibrary:
         song = self.get_song(key)
         return song.path if song else None
 
+    def get_image_path(self, key):
+        song = self.get_song(key)
+        return song.image_path if song else None
+
     def set_rating(self, key, rating):
         song = self.get_song(key)
         if not song:
             return
         song.set_rating(rating)
+        self.repository.save(self.library)
+
+    def set_image_path(self, key, image_path):
+        song = self.get_song(key)
+        if not song:
+            return
+        song.image_path = image_path
         self.repository.save(self.library)
 
     def increment_play_count(self, key):
@@ -82,12 +93,12 @@ class TrackLibrary:
         song.increment_play_count()
         self.repository.save(self.library)
 
-    def add_song(self, key, name, artist, rating=0, play_count=0, duration=0, path=""):
+    def add_song(self, key, name, artist, rating=0, play_count=0, duration=0, path="", image_path=""):
         key = str(key)
         if key in self.library:
             raise ValueError("Key đã tồn tại.")
 
-        self.library[key] = Song(name, artist, rating, play_count, duration, path)
+        self.library[key] = Song(name, artist, rating, play_count, duration, path, image_path)
         self.repository.save(self.library)
 
     def remove_song(self, key):

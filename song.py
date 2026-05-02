@@ -1,11 +1,12 @@
 class Song:
-    def __init__(self, name, artist, rating=0, play_count=0, duration=0, path=""):
+    def __init__(self, name, artist, rating=0, play_count=0, duration=0, path="", image_path=""):
         self.name = name
         self.artist = artist
         self.rating = int(rating)
         self.play_count = int(play_count)
         self.duration = int(duration)
         self.path = path
+        self.image_path = image_path
 
     def info(self):
         return f"{self.name} - {self.artist} {self.stars()}"
@@ -35,7 +36,8 @@ class Song:
             "rating": self.rating,
             "play_count": self.play_count,
             "duration": self.duration,
-            "path": self.path
+            "path": self.path,
+            "image_path": self.image_path
         }
 
     @classmethod
@@ -46,5 +48,6 @@ class Song:
             rating=data.get("rating", 0),
             play_count=data.get("play_count", 0),
             duration=data.get("duration", 0),
-            path=data.get("path", "")
+            path=data.get("path", ""),
+            image_path=data.get("image_path", "")
         )
