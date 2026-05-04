@@ -152,6 +152,7 @@ class TrackViewer():
 
         self._library.set_image_path(key, image_path)
         self._view_tracks_clicked()
+        Popup(self._window, 1, f'Image for track "{name}" was updated.')
         self._status_lbl.configure(text=f'Image path for "{name}" was updated.')
 
     def _clear_track_image(self):
