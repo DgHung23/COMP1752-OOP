@@ -1,8 +1,8 @@
 id,name,artist,rating,play_count,duration,path,image_path
-1,The Nights,Avicii,5,100,220,assets\songs\Avicii-The_Nights.mp3,E:/Greenwich/object_orentage_p/Final/code/inovation/assets/imgs/avicii.jpg
+1,The Nights,Avicii,5,100,220,assets\songs\Avicii-The_Nights.mp3,assets/imgs/avicii.jpg
 2,Waiting For Love,Avicii,3,29,230,assets\songs\Avicii-Waiting_For_Love.mp3,assets/imgs/avicii.jpg
 3,Its My Life,Bon_Jovi,3,20,224,assets\songs\Bon_Jovi-Its_My_Life.mp3,assets/imgs/bon_chovy.jpg
-4,Mockingbird,Eminem,2,15,253,assets\songs\Eminem-Mockingbird.mp3,assets/imgs/eminem.jpg
+4,Mockingbird,Eminem,2,16,253,assets\songs\Eminem-Mockingbird.mp3,assets/imgs/eminem.jpg
 5,7_Years,Lukas_Graham,2,4,234,assets\songs\Lukas_Graham-7_Years.mp3,assets/imgs/Lukas_Graha.jpg
 6,False Alarm,The_Weeknd,4,7,210,assets\songs\The_Weeknd-False_Alarm.mp3,assets/imgs/the_weekend.jpg
 7,Runing up that hill,Kate Bush,5,8,279,assets\songs\Kate_Bush-Running_Up_That_Hill.mp3,assets/imgs/Kate_Bush.jpg
